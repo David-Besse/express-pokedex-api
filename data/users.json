@@ -1,0 +1,10 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "email": "admin@pkm.com",
+            "password": "AdminPKM2024!",
+            "admin": true
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "api-pokedex",
+  "version": "1.0.0",
+  "description": "Restful API for my Angular Pokedex project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "(https://github.com/David-Besse/express-pokedex-api.git)"
+  },
+  "author": "David Besse",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
