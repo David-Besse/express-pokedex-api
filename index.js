@@ -1,12 +1,37 @@
 // Create an express server, listening on port 8080
-const express = require("express");
 
+const express = require("express");
 const app = express();
 
+// Import data
 const { pokemons } = require("./data/pokemons.json");
-const { users } = require("./data/users.json");
 const pokemonsMap = new Map(pokemons.map((pokemon) => [pokemon.id, pokemon]));
-const usersMap = new Map(users.map((user) => [user.id, user]));
+// const { users } = require("./data/users.json");
+// const usersMap = new Map(users.map((user) => [user.id, user]));
+
+/**
+ * Logs the endpoint being accessed and calls the next middleware function.
+ *
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ * @return {void}
+ */
+function logEndpoint(req, res, next) {
+  console.log(`Endpoint used: ${req.method} ${req.originalUrl}`);
+  next();
+}
+
+// Use the middleware function logEndpoint for all incoming requests
+app.use(logEndpoint);
+
+// Parse incoming requests with JSON payloads
+app.use(express.json());
+
+// Start the server
+app.listen(8080, () => {
+  console.log("Server running on port 8080");
+});
 
 /**
  * A function that returns an error message based on the provided status code.
@@ -31,29 +56,7 @@ function getErrorMessage(statusCode) {
   }
 }
 
-/**
- * Logs the endpoint being accessed and calls the next middleware function.
- *
- * @param {Object} req - The request object
- * @param {Object} res - The response object
- * @param {Function} next - The next middleware function
- * @return {void}
- */
-function logEndpoint(req, res, next) {
-  console.log(`Endpoint used: ${req.method} ${req.originalUrl}`);
-  next();
-}
-
-// Use the middleware function logEndpoint for all incoming requests
-app.use(logEndpoint);
-
-// Parse incoming requests with JSON payloads
-app.use(express.json());
-
-app.listen(8080, () => {
-  console.log("Server running on port 8080");
-});
-
+// Endpoint to get a specific pokemon
 app.get("/apipokemons/:id", (req, res) => {
   const pokemonId = parseInt(req.params.id);
 
@@ -67,12 +70,14 @@ app.get("/apipokemons/:id", (req, res) => {
   res.status(200).json(pokemonFound);
 });
 
+// Endpoint to get all pokemons
 app.get("/apipokemons", (req, res) => {
   const pokemonList = [...pokemonsMap.values()];
 
   res.status(200).json(pokemonList);
 });
 
+// Endpoint to create a new pokemon
 app.post("/apipokemons", (req, res) => {
   const newPokemon = req.body;
 
@@ -85,6 +90,7 @@ app.post("/apipokemons", (req, res) => {
   res.status(201).json(newPokemon);
 });
 
+// Endpoint to update a pokemon
 app.put("/apipokemons/:id", (req, res) => {
   const pokemonId = parseInt(req.params.id);
 
@@ -102,6 +108,7 @@ app.put("/apipokemons/:id", (req, res) => {
   res.status(201).json(updatedPokemon);
 });
 
+// Endpoint to delete a pokemon
 app.delete("/apipokemons/:id", (req, res) => {
   const pokemonId = parseInt(req.params.id);
 
