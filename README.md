@@ -1,5 +1,7 @@
 # RESTfull API for my angular-pokedex project
 
+> built using EXPRESS and :heart:
+
 Install dependencies :
 
 ```command
