@@ -6,13 +6,12 @@ Install dependencies :
 
 ```command
 npm install
-npm i nodemon
 ```
 
-then run
+and run
 
 ```command
-nodemon
+npm start
 ```
 
 In your favourite browser, put this url to access the API

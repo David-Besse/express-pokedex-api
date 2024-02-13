@@ -11,82 +11,88 @@ import { pokemons } from "../../data/pokemons.json";
 import { getErrorMessage } from "../utils/getErrorMessage";
 
 // Create a new router instance
-const pokemonsRouter = Router();
+const pokemonsRouter: Router = Router();
 
 // Create a map of pokemons and users
 const pokemonsMap: Map<number, Pokemon> = new Map(
   pokemons.map((pokemon) => [pokemon.id, pokemon])
 );
 
-// Endpoint to get a specific pokemon
-pokemonsRouter.get("/apipokemons/:id", (req: Request, res: Response) => {
-  const pokemonId: number = parseInt(req.params.id);
+pokemonsRouter
+  .route("/apipokemons/:id")
 
-  const pokemonFound: Pokemon | undefined = pokemonsMap.get(pokemonId);
+  // Endpoint to get a specific pokemon
+  .get((req: Request, res: Response) => {
+    const pokemonId: number = parseInt(req.params.id);
 
-  if (!pokemonFound) {
-    res.status(404).json({ message: getErrorMessage(404) });
-    return;
-  }
+    const pokemonFound: Pokemon | undefined = pokemonsMap.get(pokemonId);
 
-  res.status(200).json(pokemonFound);
-});
+    if (!pokemonFound) {
+      res.status(404).json({ message: getErrorMessage(404) });
+      return;
+    }
 
-// Endpoint to get all pokemons
-pokemonsRouter.get("/apipokemons", (req: Request, res: Response) => {
-  const pokemonList: Pokemon[] = [...pokemonsMap.values()];
+    res.status(200).json(pokemonFound);
+  })
 
-  res.status(200).json(pokemonList);
-});
+  // Endpoint to update a pokemon
+  .put((req: Request, res: Response) => {
+    const pokemonId: number = parseInt(req.params.id);
 
-// Endpoint to create a new pokemon
-pokemonsRouter.post("/apipokemons", (req: Request, res: Response) => {
-  const newPokemon: Pokemon = req.body;
+    const pokemonFound: boolean = pokemonsMap.has(pokemonId);
 
-  newPokemon.id = Math.max(...pokemonsMap.keys()) + 1;
+    if (!pokemonFound) {
+      res.status(404).json({ message: getErrorMessage(404) });
+      return;
+    }
 
-  pokemonsMap.set(newPokemon.id, newPokemon);
+    const updatedPokemon: Pokemon = req.body;
 
-  res.status(201).json(newPokemon);
-});
+    pokemonsMap.set(pokemonId, updatedPokemon);
 
-// Endpoint to update a pokemon
-pokemonsRouter.put("/apipokemons/:id", (req: Request, res: Response) => {
-  const pokemonId: number = parseInt(req.params.id);
+    res.status(201).json(updatedPokemon);
+  })
 
-  const pokemonFound: boolean = pokemonsMap.has(pokemonId);
+  // Endpoint to delete a pokemon
+  .delete((req: Request, res: Response) => {
+    const pokemonId: number = parseInt(req.params.id);
 
-  if (!pokemonFound) {
-    res.status(404).json({ message: getErrorMessage(404) });
-    return;
-  }
+    const pokemonFound: boolean = pokemonsMap.has(pokemonId);
 
-  const updatedPokemon: Pokemon = req.body;
+    if (!pokemonFound) {
+      res.status(404).json({ message: getErrorMessage(404) });
+      return;
+    }
 
-  pokemonsMap.set(pokemonId, updatedPokemon);
+    const isPokemonDeleted: boolean = pokemonsMap.delete(pokemonId);
 
-  res.status(201).json(updatedPokemon);
-});
+    if (!isPokemonDeleted) {
+      res.status(500).json({ message: getErrorMessage(500) });
+      return;
+    }
 
-// Endpoint to delete a pokemon
-pokemonsRouter.delete("/apipokemons/:id", (req: Request, res: Response) => {
-  const pokemonId: number = parseInt(req.params.id);
+    res.status(200).json({ message: "Pokemon deleted" });
+  });
 
-  const pokemonFound: boolean = pokemonsMap.has(pokemonId);
+pokemonsRouter
+  .route("/apipokemons")
 
-  if (!pokemonFound) {
-    res.status(404).json({ message: getErrorMessage(404) });
-    return;
-  }
+  // Endpoint to get all pokemons
+  .get((req: Request, res: Response) => {
+    const pokemonList: Pokemon[] = [...pokemonsMap.values()];
 
-  const isPokemonDeleted: boolean = pokemonsMap.delete(pokemonId);
+    res.status(200).json(pokemonList);
+  })
 
-  if (!isPokemonDeleted) {
-    res.status(500).json({ message: getErrorMessage(500) });
-    return;
-  }
+  // Endpoint to create a new pokemon
+  .post((req: Request, res: Response) => {
+    const newPokemon: Pokemon = req.body;
 
-  res.status(200).json({ message: "Pokemon deleted" });
-});
+    newPokemon.id = Math.max(...pokemonsMap.keys()) + 1;
+
+    pokemonsMap.set(newPokemon.id, newPokemon);
+
+    res.status(201).json(newPokemon);
+  });
 
 export default pokemonsRouter;
