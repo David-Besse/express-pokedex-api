@@ -7,6 +7,7 @@ import pokemonsRouter from "./routes/pokemonsRouter";
 
 // Create an express server
 const app = express();
+const port = process.env.PORT || 8080;
 
 // Enable CORS
 app.use(
@@ -28,10 +29,10 @@ app.use(logEndpoint);
 app.use(express.json());
 
 // Use the routes
-app.use("/apipokemons", pokemonsRouter);
+app.use('/', pokemonsRouter);
 // app.use("/apiusers", usersRouter);
 
 // Start the server
-app.listen(8080, () => {
-  console.log("Server running on port 8080");
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
 });

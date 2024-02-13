@@ -7,6 +7,7 @@ import { Pokemon } from "../models/pokemon";
 // Import data
 import { pokemons } from "../../data/pokemons.json";
 
+// Import utils
 import { getErrorMessage } from "../utils/getErrorMessage";
 
 // Create a new router instance
@@ -34,13 +35,6 @@ pokemonsRouter.get("/apipokemons/:id", (req: Request, res: Response) => {
 // Endpoint to get all pokemons
 pokemonsRouter.get("/apipokemons", (req: Request, res: Response) => {
   const pokemonList: Pokemon[] = [...pokemonsMap.values()];
-
-  console.log(
-    "affichage de pokemonList",
-    pokemonList,
-    "et aussi son type : ",
-    typeof pokemonList
-  );
 
   res.status(200).json(pokemonList);
 });
