@@ -19,7 +19,7 @@ const pokemonsMap: Map<number, Pokemon> = new Map(
 );
 
 pokemonsRouter
-  .route("/apipokemons/:id")
+  .route("/api/pokemons/:id")
 
   // Endpoint to get a specific pokemon
   .get((req: Request, res: Response) => {
@@ -75,7 +75,7 @@ pokemonsRouter
   });
 
 pokemonsRouter
-  .route("/apipokemons")
+  .route("/api/pokemons")
 
   // Endpoint to get all pokemons
   .get((req: Request, res: Response) => {
