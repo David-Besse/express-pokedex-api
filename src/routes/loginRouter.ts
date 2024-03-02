@@ -2,7 +2,10 @@
 import { Request, Response, Router } from "express";
 import { body, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../../utils/generateToken";
 
 // Importing User model and Users data
 import { User } from "../models/user";
@@ -56,14 +59,18 @@ loginRouter.post(
     }
 
     // Creating a jwt token for authentication
-    const token = jwt.sign(
-      { id: checkUser.id },
-      process.env.ACCESS_TOKEN_SECRET as jwt.Secret
-    );
+    const accessToken = generateAccessToken(checkUser.id);
+    const refreshToken = generateRefreshToken(checkUser.id);
 
     // Setting the jwt token in a cookie and sending a success response
-    return res
-      .cookie("access_token", token, {
+    res
+      .cookie("access_token", accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "development" ? "lax" : "strict",
+        signed: true,
+      })
+      .cookie("refresh_token", refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "development" ? "lax" : "strict",
@@ -71,6 +78,8 @@ loginRouter.post(
       })
       .status(200)
       .json({ email: checkUser.email });
+
+    return;
   }
 );
 

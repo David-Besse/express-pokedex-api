@@ -1,41 +1,63 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload, Secret } from "jsonwebtoken";
+import { generateAccessToken } from "../../utils/generateToken";
+import getErrorMessage from "../../utils/getErrorMessage";
 
-const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  
-  if (!req.signedCookies["access_token"]) {
-    res.status(401).send({ error: "No token found in the request" });
+const authMiddleware = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  // If the request path is /api/login or /api/logout, skip authentication
+  if (req.path === "/api/login" || req.path === "/api/logout") {
     return next();
   }
 
+  // Get the access token and refresh token from the request
+  const accessToken = req.signedCookies["access_token"];
+  const refreshToken = req.signedCookies["refresh_token"];
+
+  // Verify the access token and refresh token
   try {
-    const cookie = req.signedCookies["access_token"];
-
-    if (!cookie) {
-      return res.status(401).send({
-        error: "No token found in the request",
-      });
-    }
-
-    try {
-      const decoded: JwtPayload | string = jwt.verify(
-        cookie,
+    // Verify the access token
+    let accessTokenVerified: JwtPayload | string | undefined;
+    if (accessToken) {
+      accessTokenVerified = jwt.verify(
+        accessToken,
         process.env.ACCESS_TOKEN_SECRET as Secret
       );
+    }
 
-      if (!decoded) {
-        return res.status(401).send({
-          message: "Invalid token",
-        });
-      }
-      next();
-    } catch (error) {
-      return res.status(401).send({
-        message: "Invalid token",
+    // Verify the refresh token
+    let refreshTokenVerified: JwtPayload | string | undefined;
+    if (refreshToken) {
+      refreshTokenVerified = jwt.verify(
+        refreshToken,
+        process.env.REFRESH_TOKEN_SECRET as Secret
+      );
+    }
+
+    // If the refresh token is not valid, send an error response
+    if (!refreshTokenVerified) {
+      res.status(401).send("No refresh token found in the request");
+      return next();
+    }
+
+    // If the access token is not valid, generate a new access token
+    if (!accessTokenVerified) {
+      const newAccessToken = generateAccessToken(refreshToken.userId);
+
+      res.cookie("access_token", newAccessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "development" ? "lax" : "strict",
+        signed: true,
       });
     }
+
+    return next();
   } catch (error) {
-    return res.status(401).json({ message: "Invalid token" });
+    return res.status(401).send({ error: getErrorMessage(401) });
   }
 };
 

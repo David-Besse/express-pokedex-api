@@ -12,9 +12,13 @@ logoutRouter
   // Use the authMiddleware for authentication
   .post(authMiddleware, (req: Request, res: Response) => {
     // Clear the access_token cookie and send a 200 status with a message
-    res.clearCookie("access_token").status(200).send({
-      message: true,
-    });
+    res
+      .clearCookie("access_token")
+      .clearCookie("refresh_token")
+      .status(200)
+      .send({
+        message: true,
+      });
   });
 
 // Export the logoutRouter

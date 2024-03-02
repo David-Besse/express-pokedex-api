@@ -10,7 +10,7 @@ import { Pokemon } from "../models/pokemon";
 import { pokemons } from "../../data/pokemons.json";
 
 // Import utils
-import { getErrorMessage } from "../utils/getErrorMessage";
+import getErrorMessage from "../../utils/getErrorMessage";
 
 // Create a new router instance
 const pokemonsRouter: Router = Router();
@@ -54,7 +54,7 @@ pokemonsRouter
   })
 
   // Endpoint to delete a pokemon
-  .delete(authMiddleware,(req: Request, res: Response) => {
+  .delete(authMiddleware, (req: Request, res: Response) => {
     const pokemonId: number = parseInt(req.params.id);
 
     const pokemonFound: boolean = pokemonsMap.has(pokemonId);
@@ -78,7 +78,7 @@ pokemonsRouter
   .route("/api/pokemons")
 
   // Endpoint to get all pokemons
-  .get(authMiddleware,(req: Request, res: Response) => {
+  .get(authMiddleware, (req: Request, res: Response) => {
     const pokemonList: Pokemon[] = [...pokemonsMap.values()];
 
     res.status(200).json(pokemonList);
