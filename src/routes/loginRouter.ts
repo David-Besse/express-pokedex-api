@@ -1,58 +1,78 @@
+// Importing necessary modules from express framework and other libraries
 import { Request, Response, Router } from "express";
-import jwt, { Secret } from "jsonwebtoken";
-import dotenv from "dotenv";
+import { body, validationResult } from "express-validator";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
+// Importing User model and Users data
 import { User } from "../models/user";
+import Users from "../../data/users";
 
-import { users } from "../../data/users.json";
-
-dotenv.config();
-
-const usersMap: Map<number, User> = new Map(
-  users.map((user) => [user.id, user])
-);
-
+// Creating a new router
 const loginRouter: Router = Router();
 
-loginRouter.post("/api/login", async (req: Request, res: Response) => {
-  const { email, password }: { email: string; password: string } = req.body;
+// Handling POST request to /api/login
+loginRouter.post(
+  "/api/login",
+  // Validating request body using express-validator
+  [
+    body("email").trim().isEmail().withMessage("Sanitized email: is not valid"),
+    body("password")
+      .trim()
+      .isLength({ min: 12 })
+      .withMessage("sanitized password: is not valid"),
+  ],
+  // Handling the asynchronous login operation
+  async (req: Request, res: Response) => {
+    // Validating the request and checking for errors
+    const errors = validationResult(req);
 
-  const existingUser: User | undefined = [...usersMap.values()].find(
-    (user) => user.email === email
-  );
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
 
-  if (!existingUser || existingUser.password !== password) {
-    return res.status(401).json([]);
-  }
+    // Extracting email and password from the request body
+    const { email, password }: { email: string; password: string } = req.body;
 
-  let token;
-
-  try {
-    //Creating jwt token
-    token = jwt.sign(
-      {
-        userId: existingUser.id,
-        email: existingUser.email,
-      },
-      process.env.ACCESS_TOKEN_SECRET as Secret,
-      { expiresIn: "1h" }
+    // Checking if the user exists in the Users data
+    const checkUser: User | undefined = Users.find(
+      (user) => user.email === email
     );
-  } catch (err) {
-    console.log("error in generating token:", err);
-    return res.status(400).json([]);
+
+    // Handling invalid email
+    if (!checkUser) {
+      return res.status(401).json({ message: "Invalid email" });
+    }
+
+    // Checking if the password provided matches the stored password using bcrypt
+    const isPasswordCorrect: boolean = await bcrypt.compare(
+      password,
+      checkUser.password
+    );
+
+    // Handling invalid password
+    if (!isPasswordCorrect) {
+      return res.status(401).json({ message: "Invalid password" });
+    }
+
+    // Creating a jwt token for authentication
+    const token = jwt.sign(
+      { id: checkUser.id },
+      process.env.ACCESS_TOKEN_SECRET as jwt.Secret
+    );
+
+    // Setting the jwt token in a cookie and sending a success response
+    return res
+      .cookie("access_token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "development" ? "lax" : "strict",
+        signed: true,
+      })
+      .status(200)
+      .json({ email: checkUser.email });
   }
+);
 
-  res
-    .cookie("access_token", token, {
-      // this is required to prevent XSS
-      httpOnly: true,
-      // this is required to prevent CSRF
-      sameSite: "none",
-      // this is required to prevent XSS (disabled in development mode)
-      // secure: true,
-    })
-    .status(200)
-    .json({ email: existingUser.email }); // dont forget to send an empty array
-});
-
+// Exporting the loginRouter
 export default loginRouter;

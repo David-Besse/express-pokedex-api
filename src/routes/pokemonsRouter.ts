@@ -1,5 +1,7 @@
 // Import modules
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
+
+import authMiddleware from "../middlewares/authMiddleware";
 
 // Import model
 import { Pokemon } from "../models/pokemon";
@@ -22,39 +24,37 @@ pokemonsRouter
   .route("/api/pokemons/:id")
 
   // Endpoint to get a specific pokemon
-  .get((req: Request, res: Response) => {
+  .get(authMiddleware, (req: Request, res: Response) => {
     const pokemonId: number = parseInt(req.params.id);
 
     const pokemonFound: Pokemon | undefined = pokemonsMap.get(pokemonId);
 
     if (!pokemonFound) {
-      res.status(404).json({ message: getErrorMessage(404) });
-      return;
+      res.status(404).json({});
+    } else {
+      res.status(200).json(pokemonFound);
     }
-
-    res.status(200).json(pokemonFound);
   })
 
   // Endpoint to update a pokemon
-  .put((req: Request, res: Response) => {
+  .put(authMiddleware, (req: Request, res: Response) => {
     const pokemonId: number = parseInt(req.params.id);
 
     const pokemonFound: boolean = pokemonsMap.has(pokemonId);
 
     if (!pokemonFound) {
       res.status(404).json({ message: getErrorMessage(404) });
-      return;
+    } else {
+      const updatedPokemon: Pokemon = req.body;
+
+      pokemonsMap.set(pokemonId, updatedPokemon);
+
+      res.status(201).json(updatedPokemon);
     }
-
-    const updatedPokemon: Pokemon = req.body;
-
-    pokemonsMap.set(pokemonId, updatedPokemon);
-
-    res.status(201).json(updatedPokemon);
   })
 
   // Endpoint to delete a pokemon
-  .delete((req: Request, res: Response) => {
+  .delete(authMiddleware,(req: Request, res: Response) => {
     const pokemonId: number = parseInt(req.params.id);
 
     const pokemonFound: boolean = pokemonsMap.has(pokemonId);
@@ -78,14 +78,14 @@ pokemonsRouter
   .route("/api/pokemons")
 
   // Endpoint to get all pokemons
-  .get((req: Request, res: Response) => {
+  .get(authMiddleware,(req: Request, res: Response) => {
     const pokemonList: Pokemon[] = [...pokemonsMap.values()];
 
     res.status(200).json(pokemonList);
   })
 
   // Endpoint to create a new pokemon
-  .post((req: Request, res: Response) => {
+  .post(authMiddleware, (req: Request, res: Response) => {
     const newPokemon: Pokemon = req.body;
 
     newPokemon.id = Math.max(...pokemonsMap.keys()) + 1;
