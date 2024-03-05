@@ -5,5 +5,5 @@ export interface Pokemon {
   cp: number;
   picture: string;
   types: string[];
-  created: string;
+  created: Date;
 }
