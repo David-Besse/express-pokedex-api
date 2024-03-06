@@ -133,6 +133,14 @@ const pokemonData: Prisma.PokemonCreateInput[] = [
   },
 ];
 
+const userData: Prisma.UserCreateInput[] = [
+  {
+    email: "admin@pkm.com",
+    password: "$2b$10$KPx9L67RLTxiGCuPzkOrxOqeqe/RlO9pDmoP9/SUtojTpAswCK686",
+    role: "USER",
+  },
+];
+
 async function populateDb() {
   console.log(`Start seeding ...`);
   for (const p of pokemonData) {
@@ -146,7 +154,28 @@ async function populateDb() {
   console.log(`Seeding finished.`);
 }
 
-populateDb()
+async function populateUsers() {
+  console.log(`Start seeding ...`);
+  for (const u of userData) {
+    const user = await prisma.user.create({
+      data: u,
+    });
+    console.log(`Created user with id: ${user.id} and named:${user.email}`);
+  }
+  console.log(`Seeding finished.`);
+}
+
+// populateDb()
+//   .then(async () => {
+//     await prisma.$disconnect();
+//   })
+//   .catch(async (e) => {
+//     console.error(e);
+//     await prisma.$disconnect();
+//     process.exit(1);
+//   });
+
+populateUsers()
   .then(async () => {
     await prisma.$disconnect();
   })
