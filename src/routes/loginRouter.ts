@@ -17,18 +17,6 @@
  *       example:
  *         email: admin@pkm.com
  *         password: AdminPKM2024!
- *     Error:
- *       type: object
- *       properties:
- *         code:
- *           type: number
- *           format: int32
- *         message:
- *           type: string
- *     Cookie:
- *       type: string
- *       format: cookie
- *       example: cookie_name=eyJhbGciOiJIUzI1NiIsI.eyJpZCI6IjYzNjY0; Path=/; HttpOnly
  *   responses:
  *     200:
  *       email:
@@ -43,7 +31,7 @@
  * paths:
  *   /api/login:
  *     post:
- *       tags: [Authentication]
+ *       tags: [Login]
  *       summary: Login the user
  *       description: User can login to the application with email and password, he will receive an access token and a refresh token
  *       requestBody:
@@ -52,6 +40,7 @@
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/User'
+ *       security: []
  *       responses:
  *         200:
  *           description:             
@@ -64,13 +53,16 @@
  *                 $ref: '#/components/responses/200'
  *           headers:
  *             Set-Cookie:
- *               description: JWT Token for access
  *               schema:
- *                 $ref: '#/components/schemas/Cookie'
- *             Another-Cookie:
- *               description: JWT Token for refresh
+ *                 type: string
+ *                 example: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6Ik...; Path=/; HttpOnly; Secure;
+ *                 description: The session ID is returned in a cookie named `access_token`.
+ *             Set-Cookie-2:
  *               schema:
- *                 $ref: '#/components/schemas/Cookie'
+ *                 type: string
+ *                 example: refresh_token=Y3JldCIsImlhdCI6MT08TcqZjYQyQ0Uw0...; Path=/; HttpOnly; Secure;
+ *                 description: Another cookie named `refresh_token`.
+ * 
  */
 
 // Importing necessary modules from express framework and other libraries

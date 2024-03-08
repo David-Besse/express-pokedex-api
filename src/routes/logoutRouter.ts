@@ -1,9 +1,21 @@
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *    cookieAuth:
+ *      type: apiKey
+ *      in: cookie
+ *      name: access_token
+ *    cookieRefresh:
+ *      type: apiKey
+ *      in: cookie
+ *      name: refresh_token
+ * 
+ * @swagger
  * paths:
  *   /api/logout:
  *     post:
- *       tags: [Authentication]
+ *       tags: [Logout]
  *       summary: Logout the user
  *       description: Log out the user and send a command to the client to clear cookies, send a 200 status with a message
  *       responses:
@@ -15,6 +27,8 @@
  *                   type: object
  *                 example:
  *                   message: true
+ *       security:
+ *         - cookieAuth: []
  */
 
 

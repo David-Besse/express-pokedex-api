@@ -40,6 +40,120 @@
  *         created: 2022-10-25T16:00:00.000Z
  */
 
+/**
+ * @swagger
+ * paths:
+ *   /api/pokemons/{id}:
+ *     get:
+ *       tags: [Pokemons]
+ *       summary: Get one pokemon
+ *       description: Get one pokemon
+ *       operationId: getOnePokemon
+ *       parameters:
+ *         - in: path
+ *           name: id
+ *           schema:
+ *             type: integer
+ *           required: true
+ *           description: The pokemon ID
+ *       responses:
+ *         200:
+ *           description: Send the pokemon
+ *           content:
+ *             application/json:
+ *                 schema:
+ *                   $ref: '#/components/schemas/Pokemon'
+ *       security:
+ *         - cookieAuth: []
+ *     put:
+ *       tags: [Pokemons]
+ *       summary: Update one pokemon
+ *       description: Update one pokemon
+ *       operationId: updateOnePokemon
+ *       parameters:
+ *         - in: path
+ *           name: id
+ *           schema:
+ *             type: integer
+ *           required: true
+ *           description: The pokemon ID
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/Pokemon'
+ *       responses:
+ *         200:
+ *           description: Send the updated pokemon
+ *           content:
+ *             application/json:
+ *                 schema:
+ *                   $ref: '#/components/schemas/Pokemon'
+ *       security:
+ *         - cookieAuth: []
+ *     delete:
+ *       tags: [Pokemons]
+ *       summary: Delete one pokemon
+ *       description: Delete one pokemon
+ *       operationId: deleteOnePokemon
+ *       parameters:
+ *         - in: path
+ *           name: id
+ *           schema:
+ *             type: integer
+ *           required: true
+ *           description: The pokemon ID
+ *       responses:
+ *         200:
+ *           description: Send a message to confirm the deletion
+ *           content:
+ *             application/json:
+ *                 schema:
+ *                   type: object
+ *                   example:
+ *                     message: Pokemon deleted
+ *       security:
+ *         - cookieAuth: []
+ *   /api/pokemons:
+ *     get:
+ *       tags: [Pokemons]
+ *       summary: Get all pokemons
+ *       description: Get all pokemons
+ *       operationId: getAllPokemons
+ *       responses:
+ *         200:
+ *           description: The pokemons
+ *           content:
+ *             application/json:
+ *                 schema:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Pokemon'
+ *       security:
+ *         - cookieAuth: []
+ *     post:
+ *       tags: [Pokemons]
+ *       summary: Create a new pokemon
+ *       description: Create a new pokemon
+ *       operationId: createPokemon
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/Pokemon'
+ *       responses:
+ *         201:
+ *           description: The pokemon was successfully created
+ *           content:
+ *             application/json:
+ *                 schema:
+ *                   $ref: '#/components/schemas/Pokemon'
+ *       security:
+ *         - cookieAuth: []
+ */
+
 // Import modules
 import { Router, Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
