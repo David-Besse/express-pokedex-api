@@ -1,3 +1,78 @@
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         email:
+ *           type: string
+ *           format: email
+ *         password:
+ *           type: string
+ *           format: password
+ *       required:
+ *         - email
+ *         - password
+ *       example:
+ *         email: admin@pkm.com
+ *         password: AdminPKM2024!
+ *     Error:
+ *       type: object
+ *       properties:
+ *         code:
+ *           type: number
+ *           format: int32
+ *         message:
+ *           type: string
+ *     Cookie:
+ *       type: string
+ *       format: cookie
+ *       example: cookie_name=eyJhbGciOiJIUzI1NiIsI.eyJpZCI6IjYzNjY0; Path=/; HttpOnly
+ *   responses:
+ *     200:
+ *       email:
+ *         type: string
+ *         format: email
+ *       example:
+ *         email: admin@pkm.com
+ */
+
+/**
+ * @swagger
+ * paths:
+ *   /api/login:
+ *     post:
+ *       tags: [Authentication]
+ *       summary: Login the user
+ *       description: User can login to the application with email and password, he will receive an access token and a refresh token
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       responses:
+ *         200:
+ *           description:             
+ *             User Successfully authenticated.
+ *             The session ID is returned in a cookie named `access_token`. You need to include this cookie in subsequent requests.
+ *             Another cookie named `refresh_token` is returned. You need to include this cookie in subsequent requests.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/responses/200'
+ *           headers:
+ *             Set-Cookie:
+ *               description: JWT Token for access
+ *               schema:
+ *                 $ref: '#/components/schemas/Cookie'
+ *             Another-Cookie:
+ *               description: JWT Token for refresh
+ *               schema:
+ *                 $ref: '#/components/schemas/Cookie'
+ */
+
 // Importing necessary modules from express framework and other libraries
 import { Request, Response, Router } from "express";
 import { body, validationResult } from "express-validator";

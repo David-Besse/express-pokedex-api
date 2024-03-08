@@ -1,3 +1,45 @@
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Pokemon:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           format: int32
+ *         name:
+ *           type: string
+ *         hp:
+ *           type: integer
+ *           format: int32
+ *         cp:
+ *           type: integer
+ *           format: int32
+ *         types:
+ *           type: array
+ *           items:
+ *             type: string
+ *         picture:
+ *           type: string
+ *         created:
+ *           type: string
+ *           format: date-time
+ *       required:
+ *         - name
+ *         - hp
+ *         - cp
+ *         - types
+ *         - created
+ *       example:
+ *         id: 1
+ *         name: Bulbizarre
+ *         hp: 25
+ *         cp: 5
+ *         types: ["Plante", "Poison"]
+ *         created: 2022-10-25T16:00:00.000Z
+ */
+
 // Import modules
 import { Router, Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
