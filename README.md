@@ -14,10 +14,10 @@ and run
 npm start
 ```
 
-In your favourite browser, put this url to access the API
+In your favourite browser, put this url to access API documentations (made with Swagger)
 
 ```text
-http://localhost:8080/apipokemons
+http://localhost:8080/api-docs/
 ```
 
 ## Endpoints
