@@ -10,6 +10,7 @@ import swaggerUI from "swagger-ui-express";
 import pokemonsRouter from "./routes/pokemonsRouter";
 import loginRouter from "./routes/loginRouter";
 import logoutRouter from "./routes/logoutRouter";
+import faviconRouter from "./routes/faviconRouter";
 
 // Load environment variables
 dotenv.config();
@@ -49,14 +50,16 @@ app.use(express.urlencoded({ extended: true }));
 // Middleware function to log the Endpoint for all incoming requests
 app.use(
   morgan(
-    `${process.env.NODE_ENV === "development"
-      ? process.env.MORGAN_MODE
-      : process.env.MORGAN_MODE_P}`
+    `${
+      process.env.NODE_ENV === "development"
+        ? process.env.MORGAN_MODE
+        : process.env.MORGAN_MODE_P
+    }`
   )
 );
 
 // Use the routes
-app.use([logoutRouter, loginRouter, pokemonsRouter]);
+app.use([logoutRouter, loginRouter, pokemonsRouter, faviconRouter]);
 // app.use([mainRouter]);
 
 const swagOptions = {
@@ -86,11 +89,12 @@ const swagOptions = {
   apis: ["./src/routes/*.ts"],
 };
 
-app.use(
-  "/api-docs",
-  swaggerUI.serve,
-  swaggerUI.setup(swaggerJSDoc(swagOptions))
-);
+const specs = swaggerJSDoc(swagOptions);
+const options = {
+  customCss: ".swagger-ui .topbar { display: none }",
+};
+
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs, options));
 
 // Start the server
 app.listen(port, () => {
