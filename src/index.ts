@@ -55,8 +55,8 @@ app.use(
 );
 
 // Use the routes
-// app.use([logoutRouter, loginRouter, pokemonsRouter, mainRouter]);
-app.use([mainRouter]);
+app.use([logoutRouter, loginRouter, pokemonsRouter, mainRouter]);
+// app.use([mainRouter]);
 
 const swagOptions = {
   definition: {
