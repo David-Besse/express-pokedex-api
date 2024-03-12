@@ -84,8 +84,8 @@ app.listen(port, () => {
   console.log(`Server running on ${process.env.SERVER_URI}:${port}`);
 });
 
-// genrate random secret
-// console.log(require('crypto').randomBytes(256).toString('hex'));
-
 // Export the app (dont forget this to deploy on Vercel as a serverless function)
 export default app;
+
+// genrate random secret
+// console.log(require('crypto').randomBytes(256).toString('hex'));
