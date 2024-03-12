@@ -46,7 +46,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
 // Use the routes
-app.use([logoutRouter, loginRouter, pokemonsRouter, mainRouter]);
+// app.use([logoutRouter, loginRouter, pokemonsRouter, mainRouter]);
+app.use([mainRouter]);
 
 const swagOptions = {
   definition: {
