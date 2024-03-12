@@ -7,9 +7,11 @@
     "seed": "ts-node prisma/seed.ts"
   },
   "scripts": {
-    "start": "nodemon src/index.ts",
+    "start": "ts-node src/index.ts",
+    "dev": "nodemon src/index.ts",
     "build": "tsc",
-    "serve": "node api/index.js"
+    "serve": "node dist/index.js",
+    "vercel-build": "echo hello"
   },
   "repository": {
     "type": "git",

@@ -1,16 +1,18 @@
 {
   "compilerOptions": {
     "target": "ES6",
+    "sourceMap": true,
     "module": "commonjs",
     "removeComments": true,
-    "outDir": "./api",
+    "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "noImplicitAny": true,
   },
-  "include": ["src/**/*"],
-  "exclude": ["./node_modules","./api"]
+  "include": ["src/**/*", "/api/*.ts"],
+  "exclude": ["./node_modules","./dist"]
 }
