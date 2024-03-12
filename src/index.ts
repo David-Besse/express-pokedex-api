@@ -19,15 +19,18 @@ dotenv.config();
 const app = express();
 app.disable("x-powered-by");
 
-const port = process.env.PORT || 8080;
+const port =
+  process.env.NODE_ENV === "development"
+    ? process.env.PORT
+    : process.env.PORT_P;
 
 // Enable CORS
 app.use(
   cors({
     origin: `${
       process.env.NODE_ENV === "development"
-        ? "http://localhost:4200"
-        : "https://pokedex-david-besse.vercel.app"
+        ? process.env.CLIENT_URL
+        : process.env.CLIENT_URL_P
     }`,
     credentials: true,
   })
@@ -43,7 +46,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Middleware function to log the Endpoint for all incoming requests
-app.use(morgan("dev"));
+app.use(
+  morgan(
+    `${process.env.NODE_ENV === "development"
+      ? process.env.MORGAN_MODE
+      : process.env.MORGAN_MODE_P}`
+  )
+);
 
 // Use the routes
 // app.use([logoutRouter, loginRouter, pokemonsRouter, mainRouter]);
@@ -65,8 +74,11 @@ const swagOptions = {
     },
     servers: [
       {
-        url: `${process.env.SERVER_URI}:${port}`,
-        description: "Main server",
+        url: `${
+          process.env.NODE_ENV === "development"
+            ? process.env.SERVER_URL
+            : process.env.SERVER_URL_P
+        }:${port}`,
       },
     ],
   },
@@ -81,7 +93,13 @@ app.use(
 
 // Start the server
 app.listen(port, () => {
-  console.log(`Server running on ${process.env.SERVER_URI}:${port}`);
+  console.log(
+    `Server running on ${
+      process.env.NODE_ENV === "development"
+        ? process.env.SERVER_URL
+        : process.env.SERVER_URL_P
+    }:${port}`
+  );
 });
 
 // Export the app (dont forget this to deploy on Vercel as a serverless function)

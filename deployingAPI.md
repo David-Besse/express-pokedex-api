@@ -27,7 +27,7 @@ NB: dont forget to export your app inside your main file. See exemple below.
 ```text
 // Start the server
 app.listen(port, () => {
-  console.log(`Server running on ${process.env.SERVER_URI}:${port}`);
+  console.log(`Server running on ${process.env.SERVER_URL}:${port}`);
 });
 
 // Export the app (dont forget this to deploy on Vercel as a serverless function)
