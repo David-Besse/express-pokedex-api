@@ -16,7 +16,7 @@ const express_1 = require("express");
 const express_validator_1 = require("express-validator");
 const client_1 = require("@prisma/client");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const generateToken_1 = require("../../utils/generateToken");
+const generateToken_1 = require("../utils/generateToken");
 const prisma = new client_1.PrismaClient();
 const loginRouter = (0, express_1.Router)();
 loginRouter.post("/api/login", [

@@ -74,7 +74,7 @@ import bcrypt from "bcrypt";
 import {
   generateAccessToken,
   generateRefreshToken,
-} from "../../utils/generateToken";
+} from "../utils/generateToken";
 
 // Importing User model and Users data
 import { User } from "../models/user";

@@ -163,7 +163,7 @@ import authMiddleware from "../middlewares/authMiddleware";
 // Import model
 import { Pokemon } from "../models/pokemon";
 // Import utils
-import getErrorMessage from "../../utils/getErrorMessage";
+import getErrorMessage from "../utils/getErrorMessage";
 
 const pokemonsRouter: Router = Router();
 

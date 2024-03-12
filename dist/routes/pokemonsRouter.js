@@ -16,7 +16,7 @@ const express_1 = require("express");
 const client_1 = require("@prisma/client");
 const express_validator_1 = require("express-validator");
 const authMiddleware_1 = __importDefault(require("../middlewares/authMiddleware"));
-const getErrorMessage_1 = __importDefault(require("../../utils/getErrorMessage"));
+const getErrorMessage_1 = __importDefault(require("../utils/getErrorMessage"));
 const pokemonsRouter = (0, express_1.Router)();
 const prisma = new client_1.PrismaClient();
 pokemonsRouter

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload, Secret } from "jsonwebtoken";
-import { generateAccessToken } from "../../utils/generateToken";
-import getErrorMessage from "../../utils/getErrorMessage";
+import { generateAccessToken } from "../utils/generateToken";
+import getErrorMessage from "../utils/getErrorMessage";
 
 const authMiddleware = async (
   req: Request,
