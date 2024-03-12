@@ -3,7 +3,7 @@
     "target": "ES6",
     "module": "commonjs",
     "removeComments": true,
-    "outDir": "./public",
+    "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -12,5 +12,5 @@
     "resolveJsonModule": true
   },
   "include": ["src/**/*"],
-  "exclude": ["./node_modules","./public"]
+  "exclude": ["./node_modules","./dist"]
 }

@@ -13,6 +13,7 @@ const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const pokemonsRouter_1 = __importDefault(require("./routes/pokemonsRouter"));
 const loginRouter_1 = __importDefault(require("./routes/loginRouter"));
 const logoutRouter_1 = __importDefault(require("./routes/logoutRouter"));
+const mainRouter_1 = __importDefault(require("./routes/mainRouter"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.disable("x-powered-by");
@@ -27,7 +28,7 @@ app.use((0, cookie_parser_1.default)(process.env.COOKIE_SECRET));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, morgan_1.default)("dev"));
-app.use([logoutRouter_1.default, loginRouter_1.default, pokemonsRouter_1.default]);
+app.use([logoutRouter_1.default, loginRouter_1.default, pokemonsRouter_1.default, mainRouter_1.default]);
 const swagOptions = {
     definition: {
         openapi: "3.0.0",

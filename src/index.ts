@@ -10,6 +10,7 @@ import swaggerUI from "swagger-ui-express";
 import pokemonsRouter from "./routes/pokemonsRouter";
 import loginRouter from "./routes/loginRouter";
 import logoutRouter from "./routes/logoutRouter";
+import mainRouter from "./routes/mainRouter";
 
 // Load environment variables
 dotenv.config();
@@ -45,7 +46,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
 // Use the routes
-app.use([logoutRouter, loginRouter, pokemonsRouter]);
+app.use([logoutRouter, loginRouter, pokemonsRouter, mainRouter]);
 
 const swagOptions = {
   definition: {
