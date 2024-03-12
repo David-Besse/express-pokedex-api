@@ -54,7 +54,8 @@ const swagOptions = {
     info: {
       title: "Pokedex API",
       version: "1.0.0",
-      description: "This is a simple restful API for my Angular Pokedex project",
+      description:
+        "This is a simple restful API for my Angular Pokedex project",
       contact: {
         name: "David Besse",
         url: "https://github.com/David-Besse/express-pokedex-api",
@@ -84,3 +85,6 @@ app.listen(port, () => {
 
 // genrate random secret
 // console.log(require('crypto').randomBytes(256).toString('hex'));
+
+// Export the app (dont forget this to deploy on Vercel as a serverless function)
+export default app;

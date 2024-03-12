@@ -55,3 +55,4 @@ app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.de
 app.listen(port, () => {
     console.log(`Server running on ${process.env.SERVER_URI}:${port}`);
 });
+exports.default = app;
