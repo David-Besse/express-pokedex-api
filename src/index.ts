@@ -4,8 +4,8 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import morgan from "morgan";
-import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
+import {swaggerParams} from "./swagger/swaggerParam";
 
 import pokemonsRouter from "./routes/pokemonsRouter";
 import loginRouter from "./routes/loginRouter";
@@ -62,39 +62,8 @@ app.use(
 app.use([logoutRouter, loginRouter, pokemonsRouter, faviconRouter]);
 // app.use([mainRouter]);
 
-const swagOptions = {
-  definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "Pokedex API",
-      version: "1.0.0",
-      description:
-        "This is a simple restful API for my Angular Pokedex project",
-      contact: {
-        name: "David Besse",
-        url: "https://github.com/David-Besse/express-pokedex-api",
-        email: "davidb.webdev@gmail.com",
-      },
-    },
-    servers: [
-      {
-        url: `${
-          process.env.NODE_ENV === "development"
-            ? process.env.SERVER_URL
-            : process.env.SERVER_URL_P
-        }:${port}`,
-      },
-    ],
-  },
-  apis: ["./src/routes/*.ts"],
-};
-
-const specs = swaggerJSDoc(swagOptions);
-const options = {
-  customCss: ".swagger-ui .topbar { display: none }",
-};
-
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs, options));
+// Swagger
+app.use("/api-docs", swaggerUI.serve, swaggerParams);
 
 // Start the server
 app.listen(port, () => {
