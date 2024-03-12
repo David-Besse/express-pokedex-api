@@ -19,6 +19,8 @@ dotenv.config();
 const app = express();
 app.disable("x-powered-by");
 
+app.use(express.static("public"));
+
 const port =
   process.env.NODE_ENV === "development"
     ? process.env.PORT
