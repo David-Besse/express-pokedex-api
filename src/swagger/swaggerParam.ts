@@ -43,5 +43,9 @@ const swagOptions = {
 };
 
 const swaggerSpecs = swaggerJSDoc(swagOptions);
+const swaggerOptions = {
+  customCss:
+    "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.10/swagger-ui.min.css",
+};
 
-export const swaggerParams = swaggerUI.setup(swaggerSpecs);
+export const swaggerParams = swaggerUI.setup(swaggerSpecs, swaggerOptions);
