@@ -24,6 +24,20 @@ const swagOptions = {
         }`,
       },
     ],
+    components: {
+      securitySchemes: {
+        cookieAuth: {
+          type: "apiKey",
+          in: "cookie",
+          name: "access_token",
+        },
+        cookieRefresh: {
+          type: "apiKey",
+          in: "cookie",
+          name: "refresh_token",
+        },
+      },
+    },
   },
   apis: ["./src/routes/*.ts"],
 };

@@ -1,17 +1,5 @@
 /**
  * @swagger
- * components:
- *   securitySchemes:
- *    cookieAuth:
- *      type: apiKey
- *      in: cookie
- *      name: access_token
- *    cookieRefresh:
- *      type: apiKey
- *      in: cookie
- *      name: refresh_token
- * 
- * @swagger
  * paths:
  *   /api/logout:
  *     post:
