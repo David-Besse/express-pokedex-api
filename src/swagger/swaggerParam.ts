@@ -44,6 +44,4 @@ const swagOptions = {
 
 const swaggerSpecs = swaggerJSDoc(swagOptions);
 
-export const swaggerParams = swaggerUI.setup(swaggerSpecs, {
-  customCss: ".swagger-ui .topbar { display: none }",
-});
+export const swaggerParams = swaggerUI.setup(swaggerSpecs);
