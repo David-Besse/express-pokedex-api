@@ -44,4 +44,10 @@ const swagOptions = {
 
 const swaggerSpecs = swaggerJSDoc(swagOptions);
 
-export const swaggerParams = swaggerUI.setup(swaggerSpecs);
+const CSS_URL =
+  "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
+const options = {
+  customCssUrl: CSS_URL,
+};
+
+export const swaggerParams = swaggerUI.setup(swaggerSpecs, options);
