@@ -193,7 +193,7 @@ pokemonsRouter
       res.status(200).json(pokemonsList);
     } catch (e) {
       console.error(e);
-      res.status(500).json({ message: getErrorMessage(500) });
+      res.status(500).json([]);
       await prisma.$disconnect();
       process.exit(1);
     }
