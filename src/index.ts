@@ -4,9 +4,9 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import morgan from "morgan";
-import swaggerUI from "swagger-ui-express";
-import {swaggerParams} from "./swagger/swaggerParam";
+import swaggerUi from "swagger-ui-express";
 
+import {swaggerParams} from "./swagger/swaggerParam";
 import pokemonsRouter from "./routes/pokemonsRouter";
 import loginRouter from "./routes/loginRouter";
 import logoutRouter from "./routes/logoutRouter";
@@ -60,10 +60,9 @@ app.use(
 
 // Use the routes
 app.use([logoutRouter, loginRouter, pokemonsRouter, faviconRouter]);
-// app.use([mainRouter]);
 
 // Swagger
-app.use("/api-docs", swaggerUI.serve, swaggerParams);
+app.use("/api-docs", swaggerUi.serve, swaggerParams);
 
 // Start the server
 app.listen(port, () => {

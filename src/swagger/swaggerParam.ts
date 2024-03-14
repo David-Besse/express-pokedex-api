@@ -1,6 +1,5 @@
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI, { SwaggerOptions } from "swagger-ui-express";
-import { SwaggerUIBundle, SwaggerUIStandalonePreset } from "swagger-ui-dist";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -88,11 +87,9 @@ const swagOptions: SwaggerOptions = {
 
 const swaggerSpecs: SwaggerOptions = swaggerJSDoc(swagOptions);
 
-const CSS_URL: string =
-  "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
+// const options: SwaggerOptions = {
+//   customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.12.0/swagger-ui.min.css",
+//   customJsUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.12.0/swagger-ui.min.js",
+// };
 
-const options: SwaggerOptions = {
-  customCssUrl: CSS_URL,
-};
-
-export const swaggerParams = swaggerUI.setup(swaggerSpecs, options);
+export const swaggerParams = swaggerUI.setup(swaggerSpecs);
