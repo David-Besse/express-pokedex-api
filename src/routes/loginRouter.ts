@@ -72,6 +72,7 @@ loginRouter.post(
 
     // Setting the jwt token in a cookie and sending a success response
     res
+      .header("Access-Control-Allow-Credentials", "true")
       .cookie("access_token", accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
