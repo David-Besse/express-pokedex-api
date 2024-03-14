@@ -87,9 +87,8 @@ const swagOptions: SwaggerOptions = {
 
 const swaggerSpecs: SwaggerOptions = swaggerJSDoc(swagOptions);
 
-// const options: SwaggerOptions = {
-//   customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.12.0/swagger-ui.min.css",
-//   customJsUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.12.0/swagger-ui.min.js",
-// };
+const options: SwaggerOptions = {
+  customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.12.0/swagger-ui.min.css",
+};
 
-export const swaggerParams = swaggerUI.setup(swaggerSpecs);
+export const swaggerParams = swaggerUI.setup(swaggerSpecs, options);
