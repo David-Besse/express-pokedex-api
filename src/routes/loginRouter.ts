@@ -72,7 +72,7 @@ loginRouter.post(
 
     // Setting the jwt token in a cookie and sending a success response
     res
-      .header("Access-Control-Allow-Credentials", "true")
+      .header("Access-Control-Allow-Credentials", "https://dbwd-pokedex.vercel.app")
       .cookie("access_token", accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
