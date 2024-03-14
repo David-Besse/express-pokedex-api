@@ -1,23 +1,23 @@
-/**
- * @swagger
- * paths:
- *   /api/logout:
- *     post:
- *       tags: [Logout]
- *       summary: Logout the user
- *       description: Log out the user and send a command to the client to clear cookies, send a 200 status with a message
- *       responses:
- *         200:
- *           description: User successfully logged out.
- *           content:
- *             application/json:
- *                 message:
- *                   type: object
- *                 example:
- *                   message: true
- *       security:
- *         - cookieAuth: []
- */
+// /**
+//  * @swagger
+//  * paths:
+//  *   /api/logout:
+//  *     post:
+//  *       tags: [Logout]
+//  *       summary: Logout the user
+//  *       description: Log out the user and send a command to the client to clear cookies, send a 200 status with a message
+//  *       responses:
+//  *         200:
+//  *           description: User successfully logged out.
+//  *           content:
+//  *             application/json:
+//  *                 message:
+//  *                   type: object
+//  *                 example:
+//  *                   message: true
+//  *       security:
+//  *         - cookieAuth: []
+//  */
 
 
 // Import necessary modules from express
