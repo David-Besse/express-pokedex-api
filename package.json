@@ -11,8 +11,7 @@
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "serve": "node dist/index.js",
-    "vercel-build": "echo hello",
-    "postinstall": "prisma generate"
+    "vercel-build": "prisma generate && prisma migrate deploy && ts-node prisma/seed.ts"
   },
   "repository": {
     "type": "git",

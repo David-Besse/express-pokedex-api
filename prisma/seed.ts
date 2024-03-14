@@ -165,15 +165,15 @@ async function populateUsers() {
   console.log(`Seeding finished.`);
 }
 
-// populateDb()
-//   .then(async () => {
-//     await prisma.$disconnect();
-//   })
-//   .catch(async (e) => {
-//     console.error(e);
-//     await prisma.$disconnect();
-//     process.exit(1);
-//   });
+populateDb()
+  .then(async () => {
+    await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
 
 populateUsers()
   .then(async () => {
