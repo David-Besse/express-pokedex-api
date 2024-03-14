@@ -10,9 +10,11 @@ const authMiddleware = async (
 ) => {
   // If the request path is /api/login or /api/logout, skip authentication
   if (req.path === "/api/login" || req.path === "/api/logout") {
+    console.log('détecté dans la route /api/login ou /api/logout');
     return next();
   }
 
+  console.log('ca vérifie les tokens');
   // Get the access token and refresh token from the request
   const accessToken = req.signedCookies["access_token"];
   const refreshToken = req.signedCookies["refresh_token"];
@@ -39,7 +41,7 @@ const authMiddleware = async (
 
     // If the refresh token is not valid, send an error response
     if (!refreshTokenVerified) {
-      res.status(401).send("No refresh token found in the request");
+      res.status(401).send({message: "No refresh token found in the request"});
       return next();
     }
 

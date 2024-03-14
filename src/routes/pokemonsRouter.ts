@@ -191,9 +191,9 @@ pokemonsRouter
       const pokemonsList: Pokemon[] = await prisma.pokemon.findMany();
       await prisma.$disconnect();
       res.status(200).json(pokemonsList);
-    } catch (e) {
-      console.error(e);
-      res.status(500).json([]);
+    } catch (error: any) {
+      console.error(error);
+      res.status(error.status).json([]);
       await prisma.$disconnect();
       process.exit(1);
     }
