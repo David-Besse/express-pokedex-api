@@ -28,7 +28,10 @@ const port =
 
 // Enable CORS
 const corsOptions = {
-  origin: true,
+  origin:
+    process.env.NODE_ENV === "development"
+      ? process.env.CLIENT_URL
+      : process.env.CLIENT_URL_P,
   methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH", "OPTIONS"],
   credentials: true,
   optionsSuccessStatus: 200,
