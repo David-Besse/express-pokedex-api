@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 
-import {swaggerParams} from "./swagger/swaggerParam";
+import { swaggerParams } from "./swagger/swaggerParam";
 import pokemonsRouter from "./routes/pokemonsRouter";
 import loginRouter from "./routes/loginRouter";
 import logoutRouter from "./routes/logoutRouter";
@@ -27,16 +27,12 @@ const port =
     : process.env.PORT_P;
 
 // Enable CORS
-app.use(
-  cors({
-    origin: `${
-      process.env.NODE_ENV === "development"
-        ? process.env.CLIENT_URL
-        : process.env.CLIENT_URL_P
-    }`,
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: `${process.env.CLIENT_URL_P}`,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 // Parse cookies for all incoming requests
 app.use(cookieParser(process.env.COOKIE_SECRET));
