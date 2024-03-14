@@ -85,4 +85,46 @@ NB: you can choose an existing project or create a new one.
 
 - This is simple, Vercel will auto-update after every commit.
 
+## Step 6: populate your database (seed.ts)
+
+__Needed:__</br> _A Github account connected to Vercel because on every commit, Vercel will auto-update your online project._
+
+1 - Into your package.json, update "vercel-build" under "scripts" like this:
+
+```json
+"vercel-build": "prisma generate && prisma migrate deploy && ts-node prisma/seed.ts"
+```
+
+*__What happens in this snippet ?__*
+</br>
+
+_prisma generate_ : This command generates the Prisma client from your Prisma schema. This is necessary so that your application can interact with the database.
+</br>
+
+_prisma migrate deploy_ : This command applies all pending database migrations. This ensures that your database structure is up to date with your Prisma schema.</br>
+
+_ts-node prisma/seed.ts_ : This command runs your database boot script, located in prisma/seed.ts. This script fills the database with initial data.
+
+>[!WARNING]
+> Dont forget to delete the command after your database is seeded (ts-node prisma/seed.ts)
+
+After that, you have to keep :
+
+```json
+"vercel-build" : "prisma generate"
+```
+
+_**Why ?**_
+
+Because of this bug :
+
+```text
+Prisma has detected that this project was built on Vercel, which caches dependencies.
+This leads to an outdated Prisma Client because Prisma's auto-generation isn't triggered.
+```
+
+To fix this, make sure to run the `prisma generate` command during the build process.
+
+*_Learn how: https://pris.ly/d/vercel-build_*
+
 ---
