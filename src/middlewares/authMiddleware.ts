@@ -2,6 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 import { generateAccessToken } from "../utils/generateToken";
 import getErrorMessage from "../utils/getErrorMessage";
+import { PrismaClient } from "../../prisma/prisma-client";
+
+const prisma: PrismaClient = new PrismaClient();
 
 const authMiddleware = async (
   req: Request,
@@ -25,7 +28,7 @@ const authMiddleware = async (
   // Verify the access token and refresh token
   try {
     // Verify the access token
-    let accessTokenVerified: JwtPayload | string | undefined;
+    let accessTokenVerified;
     if (accessToken) {
       accessTokenVerified = jwt.verify(
         accessToken,
@@ -34,7 +37,7 @@ const authMiddleware = async (
     }
 
     // Verify the refresh token
-    let refreshTokenVerified: JwtPayload | string | undefined;
+    let refreshTokenVerified;
     if (refreshToken) {
       refreshTokenVerified = jwt.verify(
         refreshToken,
@@ -58,6 +61,30 @@ const authMiddleware = async (
         sameSite: process.env.NODE_ENV === "development" ? "lax" : "strict",
         signed: true,
       });
+    }
+
+    // If the access token and refresh token are valid
+    if (accessToken && refreshToken) {
+      const userId = accessToken.id;
+
+      const checkUser = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+
+      if (!checkUser) {
+        return res.status(401).send({ message: "Invalid access token" });
+      }
+
+      const userConnected: { id: number; email: string; role: string } = {
+        id: checkUser.id,
+        email: checkUser.email,
+        role: checkUser.role,
+      };
+
+      //* TODO: Add the user to the request object
+      // req.user  = userConnected;
     }
 
     return next();

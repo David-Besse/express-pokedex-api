@@ -36,3 +36,6 @@ gacp.bat
 # Static data
 /data
 .vercel
+
+# Prisma
+prisma/prisma-client

@@ -1,6 +1,6 @@
 // Import modules
 import { Router, Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../../prisma/prisma-client";
 import { body, param, validationResult } from "express-validator";
 // Import middlewares
 import authMiddleware from "../middlewares/authMiddleware";
@@ -22,12 +22,7 @@ pokemonsRouter
     authMiddleware,
 
     // Validating the request using express-validator
-    [
-      param("id")
-        .trim()
-        .escape()
-        .isInt({ min: 1, max: 999 }),
-    ],
+    [param("id").trim().escape().isInt({ min: 1, max: 999 })],
 
     // Handling the asynchronous request
     async (req: Request, res: Response) => {
