@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 import { generateAccessToken } from "../utils/generateToken";
 import getErrorMessage from "../utils/getErrorMessage";
-import { PrismaClient } from "../../prisma/prisma-client";
+import { PrismaClient } from "@prisma/client";
 
 const prisma: PrismaClient = new PrismaClient();
 

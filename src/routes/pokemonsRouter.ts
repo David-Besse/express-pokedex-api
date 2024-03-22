@@ -1,6 +1,6 @@
 // Import modules
 import { Router, Request, Response } from "express";
-import { PrismaClient } from "../../prisma/prisma-client";
+import { PrismaClient } from "@prisma/client";
 import { body, param, validationResult } from "express-validator";
 // Import middlewares
 import authMiddleware from "../middlewares/authMiddleware";

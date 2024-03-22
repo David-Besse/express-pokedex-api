@@ -1,7 +1,7 @@
 // Importing necessary modules from express framework and other libraries
 import { Request, Response, Router } from "express";
 import { body, validationResult } from "express-validator";
-import { PrismaClient } from "../../prisma/prisma-client";
+import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 
 import {
