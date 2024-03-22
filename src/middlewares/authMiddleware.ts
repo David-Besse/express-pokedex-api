@@ -28,7 +28,7 @@ const authMiddleware = async (
   // Verify the access token and refresh token
   try {
     // Verify the access token
-    let accessTokenVerified;
+    let accessTokenVerified: JwtPayload | undefined | string;
     if (accessToken) {
       accessTokenVerified = jwt.verify(
         accessToken,
@@ -58,7 +58,7 @@ const authMiddleware = async (
       res.cookie("access_token", newAccessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "development" ? "lax" : "strict",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         signed: true,
       });
     }
