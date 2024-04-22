@@ -1,5 +1,5 @@
 // Importing necessary modules from express framework and other libraries
-import { Request, Response, Router } from "express";
+import { Request, Response, Router, CookieOptions } from "express";
 import { body, validationResult } from "express-validator";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
@@ -13,6 +13,10 @@ import {
 import { User } from "../models/user";
 
 const prisma: PrismaClient = new PrismaClient();
+
+interface CustomCookieOptions extends CookieOptions {
+  partitioned?: boolean;
+}
 
 // Creating a new router
 const loginRouter: Router = Router();
@@ -75,17 +79,22 @@ loginRouter.post(
       .cookie("access_token", accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         signed: true,
-      })
+        partitioned: true,
+      } as CustomCookieOptions)
       .cookie("refresh_token", refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         signed: true,
-      })
+        partitioned: true,
+      } as CustomCookieOptions)
       .setHeader("Access-Control-Allow-Credentials", "true")
-      .setHeader("Access-Control-Allow-Origin", "https://dbwd-pokedex.vercel.app")
+      .setHeader(
+        "Access-Control-Allow-Origin",
+        "https://dbwd-pokedex.vercel.app"
+      )
       .status(200)
       .json({ email: findUser.email });
 
