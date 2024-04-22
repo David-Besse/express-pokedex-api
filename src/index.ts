@@ -30,8 +30,8 @@ const port =
 const corsOptions = {
   origin:
     process.env.NODE_ENV === "development"
-      ? process.env.CLIENT_URL as string
-      : process.env.CLIENT_URL_P as string,
+      ? (process.env.CLIENT_URL as string)
+      : (process.env.CLIENT_URL_P as string),
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -50,8 +50,8 @@ app.use(
   morgan(
     `${
       process.env.NODE_ENV === "development"
-        ? process.env.MORGAN_MODE
-        : process.env.MORGAN_MODE_P
+        ? (process.env.MORGAN_MODE as string)
+        : (process.env.MORGAN_MODE_P as string)
     }`
   )
 );
