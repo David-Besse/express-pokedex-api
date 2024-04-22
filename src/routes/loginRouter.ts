@@ -75,13 +75,13 @@ loginRouter.post(
       .cookie("access_token", accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
         signed: true,
       })
       .cookie("refresh_token", refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
         signed: true,
       })
       .status(200)
