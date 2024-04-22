@@ -20,14 +20,14 @@ logoutRouter
       .clearCookie("access_token", {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
         signed: true,
         partitioned: true,
       } as CustomCookieOptions)
       .clearCookie("refresh_token", {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
         signed: true,
         partitioned: true,
       } as CustomCookieOptions)
