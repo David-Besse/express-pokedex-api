@@ -73,7 +73,7 @@ const authMiddleware = async (
     });
 
     if (!checkUser) {
-      return res.status(401).send({ message: "User not found in the token" });
+      return res.status(401).send(getErrorMessage(401));
     }
 
     //* TODO: add a session management
