@@ -25,72 +25,61 @@ const authMiddleware = async (
     return next();
   }
 
-  // Verify the access token and refresh token
-  try {
-    // Verify the access token
-    let accessTokenVerified: JwtPayload | undefined | string;
-    if (accessToken) {
-      accessTokenVerified = jwt.verify(
-        accessToken,
-        process.env.ACCESS_TOKEN_SECRET as Secret
-      );
-    }
+  // Verify the access token
+  let accessTokenVerified: JwtPayload | undefined | string;
 
-    // Verify the refresh token
-    let refreshTokenVerified;
-    if (refreshToken) {
-      refreshTokenVerified = jwt.verify(
-        refreshToken,
-        process.env.REFRESH_TOKEN_SECRET as Secret
-      );
-    }
-
-    // If the refresh token is not valid, send an error response
-    if (!refreshTokenVerified) {
-      res.status(401).send({ message: "Invalid refresh token" });
-      return next();
-    }
-
-    // If the access token is not valid, generate a new access token
-    if (!accessTokenVerified) {
-      const newAccessToken = generateAccessToken(refreshToken.userId);
-
-      res.cookie("access_token", newAccessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        signed: true,
-      });
-    }
-
-    // If the access token and refresh token are valid
-    if (accessToken && refreshToken) {
-      const userId = accessToken.id;
-
-      const checkUser = await prisma.user.findUnique({
-        where: {
-          id: userId,
-        },
-      });
-
-      if (!checkUser) {
-        return res.status(401).send({ message: "Invalid access token" });
-      }
-
-      const userConnected: { id: number; email: string; role: string } = {
-        id: checkUser.id,
-        email: checkUser.email,
-        role: checkUser.role,
-      };
-
-      //* TODO: Add the user to the request object
-      // req.user  = userConnected;
-    }
-
-    return next();
-  } catch (error) {
-    return res.status(401).send({ error: getErrorMessage(401) });
+  if (accessToken) {
+    accessTokenVerified = jwt.verify(
+      accessToken,
+      process.env.ACCESS_TOKEN_SECRET as Secret
+    );
   }
+
+  // Verify the refresh token
+  let refreshTokenVerified;
+  if (refreshToken) {
+    refreshTokenVerified = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET as Secret
+    );
+  }
+
+  // If the refresh token is not valid, send an error response
+  if (!refreshTokenVerified) {
+    res.status(401).send({ message: "Invalid refresh token" });
+    return next();
+  }
+
+  // If the access token is not valid, generate a new access token
+  if (!accessTokenVerified) {
+    const newAccessToken = generateAccessToken(refreshToken.userId);
+
+    res.cookie("access_token", newAccessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      signed: true,
+    });
+  }
+
+  // If the access token and refresh token are valid
+  if (accessToken && refreshToken) {
+    const userId = accessToken.id;
+
+    const checkUser = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!checkUser) {
+      return res.status(401).send({ message: "User not found in the token" });
+    }
+
+    //* TODO: add a session management
+  }
+
+  return next();
 };
 
 export default authMiddleware;
