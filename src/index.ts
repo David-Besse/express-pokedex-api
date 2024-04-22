@@ -28,7 +28,10 @@ const port =
 
 // Enable CORS
 const corsOptions = {
-  origin: "*",
+  origin:
+    process.env.NODE_ENV === "development"
+      ? process.env.CLIENT_URL as string
+      : process.env.CLIENT_URL_P as string,
   credentials: true,
 };
 app.use(cors(corsOptions));
