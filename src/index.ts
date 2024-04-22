@@ -28,11 +28,8 @@ const port =
 
 // Enable CORS
 const corsOptions = {
-  origin: ['https://dbwb-pokedex.vercel.app/'],
-  methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH", "OPTIONS"],
-  preflightContinue: true,
+  origin: 'https://dbwb-pokedex.vercel.app',
   credentials: true,
-  optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
 
