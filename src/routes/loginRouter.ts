@@ -84,6 +84,8 @@ loginRouter.post(
         sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
         signed: true,
       })
+      .setHeader("Access-Control-Allow-Credentials", "true")
+      .setHeader("Access-Control-Allow-Origin", "https://dbwd-pokedex.vercel.app")
       .status(200)
       .json({ email: findUser.email });
 
