@@ -77,24 +77,19 @@ loginRouter.post(
     // Setting the jwt token in a cookie and sending a success response
     res
       .cookie("access_token", accessToken, {
-        httpOnly: true,
+        httpOnly: process.env.NODE_ENV === "production",
         secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        sameSite: process.env.NODE_ENV === "production" ? "lax" : "none",
         signed: true,
-        partitioned: true,
+        partitioned: process.env.NODE_ENV === "production",
       } as CustomCookieOptions)
       .cookie("refresh_token", refreshToken, {
-        httpOnly: true,
+        httpOnly: process.env.NODE_ENV === "production",
         secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        sameSite: process.env.NODE_ENV === "production" ? "lax" : "none",
         signed: true,
-        partitioned: true,
+        partitioned: process.env.NODE_ENV === "production",
       } as CustomCookieOptions)
-      .setHeader("Access-Control-Allow-Credentials", "true")
-      .setHeader(
-        "Access-Control-Allow-Origin",
-        "https://dbwd-pokedex.vercel.app"
-      )
       .status(200)
       .json({ email: findUser.email });
 

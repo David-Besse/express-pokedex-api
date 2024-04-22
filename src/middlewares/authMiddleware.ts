@@ -1,11 +1,12 @@
-import { NextFunction, Request, Response } from "express";
-import jwt, { JwtPayload, Secret } from "jsonwebtoken";
+import { CookieOptions, NextFunction, Request, Response } from "express";
+import jwt, { Secret } from "jsonwebtoken";
 import { generateAccessToken } from "../utils/generateToken";
-import getErrorMessage from "../utils/getErrorMessage";
-import { PrismaClient } from "@prisma/client";
 
-const prisma: PrismaClient = new PrismaClient();
+interface CustomCookieOptions extends CookieOptions {
+  partitioned?: boolean;
+}
 
+// Define the authMiddleware
 const authMiddleware = async (
   req: Request,
   res: Response,
@@ -19,65 +20,45 @@ const authMiddleware = async (
   // Get the access token and refresh token from the request
   const accessToken = req.signedCookies["access_token"];
   const refreshToken = req.signedCookies["refresh_token"];
-
   if (!refreshToken || !accessToken) {
     res.status(401).send({ message: "No token found in the request" });
     return next();
   }
 
   // Verify the access token
-  let accessTokenVerified: JwtPayload | undefined | string;
-
-  if (accessToken) {
-    accessTokenVerified = jwt.verify(
-      accessToken,
-      process.env.ACCESS_TOKEN_SECRET as Secret
-    );
+  const accessTokenVerified = jwt.verify(
+    accessToken,
+    process.env.ACCESS_TOKEN_SECRET as Secret
+  );
+  if (!accessTokenVerified) {
+    res.status(401).send({ message: "Invalid access token" });
+    return next();
   }
 
   // Verify the refresh token
-  let refreshTokenVerified;
-  if (refreshToken) {
-    refreshTokenVerified = jwt.verify(
-      refreshToken,
-      process.env.REFRESH_TOKEN_SECRET as Secret
-    );
-  }
-
-  // If the refresh token is not valid, send an error response
+  const refreshTokenVerified = jwt.verify(
+    refreshToken,
+    process.env.REFRESH_TOKEN_SECRET as Secret
+  );
   if (!refreshTokenVerified) {
     res.status(401).send({ message: "Invalid refresh token" });
     return next();
   }
 
-  // If the access token is not valid, generate a new access token
-  if (!accessTokenVerified) {
-    const newAccessToken = generateAccessToken(refreshToken.userId);
+  // If the access token is expires, generate a new access token
+  if (accessToken.exp < Date.now() / 1000 && refreshTokenVerified) {
+    const newAccessToken = generateAccessToken(accessToken.userId);
 
     res.cookie("access_token", newAccessToken, {
-      httpOnly: true,
+      httpOnly: process.env.NODE_ENV === "production",
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       signed: true,
-    });
+      partitioned: process.env.NODE_ENV === "production",
+    } as CustomCookieOptions);
   }
 
-  // If the access token and refresh token are valid
-  if (accessToken && refreshToken) {
-    const userId = accessToken.id;
-
-    const checkUser = await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!checkUser) {
-      return res.status(401).send(getErrorMessage(401));
-    }
-
-    //* TODO: add a session management
-  }
+  //* TODO: handle session
 
   return next();
 };

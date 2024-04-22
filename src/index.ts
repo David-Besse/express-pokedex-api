@@ -22,17 +22,16 @@ app.disable("x-powered-by");
 app.use(express.static("public"));
 
 const port =
-  process.env.NODE_ENV === "development"
-    ? process.env.PORT
-    : process.env.PORT_P;
+  process.env.NODE_ENV === "production"
+    ? process.env.PORT_P
+    : process.env.PORT;
 
 // Enable CORS
 const corsOptions = {
-  // origin: [
-  //   "https://dbwd-pokedex.vercel.app",
-  //   "https://dbwd-pokedex-api.vercel.app",
-  // ],
-  origin: "*",
+  origin:
+    process.env.NODE_ENV === "production"
+      ? (process.env.CLIENT_URL_P as string)
+      : (process.env.CLIENT_URL as string),
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -50,9 +49,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   morgan(
     `${
-      process.env.NODE_ENV === "development"
-        ? (process.env.MORGAN_MODE as string)
-        : (process.env.MORGAN_MODE_P as string)
+      process.env.NODE_ENV === "production"
+        ? (process.env.MORGAN_MODE_P as string)
+        : (process.env.MORGAN_MODE as string)
     }`
   )
 );
@@ -67,9 +66,9 @@ app.use("/api-docs", swaggerUi.serve, swaggerParams);
 app.listen(port, () => {
   console.log(
     `Server running on ${
-      process.env.NODE_ENV === "development"
-        ? process.env.SERVER_URL
-        : process.env.SERVER_URL_P
+      process.env.NODE_ENV === "production"
+        ? process.env.SERVER_URL_P
+        : process.env.SERVER_URL
     }:${port}`
   );
 });
@@ -77,5 +76,5 @@ app.listen(port, () => {
 // Export the app (dont forget this to deploy on Vercel as a serverless function)
 export default app;
 
-// genrate random secret
+// generate random secret
 // console.log(require('crypto').randomBytes(256).toString('hex'));
