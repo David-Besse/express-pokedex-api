@@ -215,7 +215,7 @@ pokemonsRouter
         .optional()
         .trim()
         .escape()
-        .isInt({ min: 1, max: 999 })
+        .isInt({ min: 1, max: 99 })
         // Custom sanitizer to ensure that it is an integer because express-validator transforms it to a string before
         // checking for errors and the value sent in the request could be a string
         .customSanitizer((value) => parseInt(value))
@@ -230,6 +230,7 @@ pokemonsRouter
         .trim()
         .isArray({ min: 1, max: 3 })
         .withMessage("Types must be an array with 1 to 3 elements"),
+      body("created").optional().isISO8601().withMessage("Invalid date"),
     ],
     async (req: Request, res: Response) => {
       const errors = validationResult(req);

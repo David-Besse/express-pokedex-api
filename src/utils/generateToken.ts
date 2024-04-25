@@ -1,4 +1,4 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt, { Jwt, JwtPayload } from "jsonwebtoken";
 
 /**
  * Generate access token with payload and expiration time
@@ -6,13 +6,17 @@ import jwt, { JwtPayload } from "jsonwebtoken";
  * @returns access token with the payload and expiration time
  */
 export const generateAccessToken = (payload: any): string => {
-  return jwt.sign(
+  let token: string;
+
+  token = jwt.sign(
     { userId: payload },
     process.env.ACCESS_TOKEN_SECRET as jwt.Secret,
     {
       expiresIn: "1h",
     }
   );
+
+  return token;
 };
 
 /**
@@ -21,11 +25,15 @@ export const generateAccessToken = (payload: any): string => {
  * @returns refresh token with the payload and expiration time
  */
 export const generateRefreshToken = (payload: any): string => {
-  return jwt.sign(
+  let token: string;
+
+  token = jwt.sign(
     { userId: payload },
     process.env.REFRESH_TOKEN_SECRET as jwt.Secret,
     {
       expiresIn: "1y",
     }
   );
+
+  return token;
 };
