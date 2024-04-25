@@ -82,6 +82,7 @@ loginRouter.post(
         sameSite: process.env.NODE_ENV === "production" ? "lax" : "none",
         signed: true,
         partitioned: process.env.NODE_ENV === "production",
+        maxAge: 1000 * 60 * 60, // 1 hour
       } as CustomCookieOptions)
       .cookie("refresh_token", refreshToken, {
         httpOnly: process.env.NODE_ENV === "production",
@@ -89,6 +90,7 @@ loginRouter.post(
         sameSite: process.env.NODE_ENV === "production" ? "lax" : "none",
         signed: true,
         partitioned: process.env.NODE_ENV === "production",
+        maxAge: 1000 * 60 * 60, // 
       } as CustomCookieOptions)
       .status(200)
       .json({ email: findUser.email });
