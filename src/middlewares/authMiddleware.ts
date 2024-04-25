@@ -12,14 +12,14 @@ const authMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  // If the request path is /api/login or /api/logout, skip authentication
-  if (req.path === "/api/login" || req.path === "/api/logout") {
+  // If the request method is GET, skip authentication
+  if (req.method === "GET") {
     return next();
   }
 
   // Get the access token and refresh token from the request
-  const accessToken = req.cookies["access_token"];
-  const refreshToken = req.cookies["refresh_token"];
+  const accessToken = req.signedCookies["access_token"];
+  const refreshToken = req.signedCookies["refresh_token"];
   if (!accessToken || !refreshToken) {
     res.status(401).send({ message: "No token found in the request" });
     return next();

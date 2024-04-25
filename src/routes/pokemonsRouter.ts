@@ -18,9 +18,6 @@ pokemonsRouter
 
   // Endpoint to get a specific pokemon
   .get(
-    // Use the authMiddleware for authentication
-    authMiddleware,
-
     // Validating the request using express-validator
     [param("id").trim().escape().isInt({ min: 1, max: 999 })],
 
@@ -181,7 +178,7 @@ pokemonsRouter
   .route("/api/pokemons")
 
   // Endpoint to get all pokemons
-  .get(authMiddleware, async (req: Request, res: Response) => {
+  .get(async (req: Request, res: Response) => {
     try {
       const pokemonsList: Pokemon[] = await prisma.pokemon.findMany();
       await prisma.$disconnect();

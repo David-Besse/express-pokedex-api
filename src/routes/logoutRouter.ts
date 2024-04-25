@@ -14,7 +14,7 @@ const logoutRouter: Router = Router();
 logoutRouter
   .route("/api/logout")
   // Use the authMiddleware for authentication
-  .post(authMiddleware, (req: Request, res: Response) => {
+  .post((req: Request, res: Response) => {
     // Clear the access_token cookie and send a 200 status with a message
     res
       .status(200)
