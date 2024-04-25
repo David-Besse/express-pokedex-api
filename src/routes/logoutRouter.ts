@@ -17,21 +17,9 @@ logoutRouter
   .post(authMiddleware, (req: Request, res: Response) => {
     // Clear the access_token cookie and send a 200 status with a message
     res
-      .clearCookie("access_token", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
-        signed: true,
-        partitioned: true,
-      } as CustomCookieOptions)
-      .clearCookie("refresh_token", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
-        signed: true,
-        partitioned: true,
-      } as CustomCookieOptions)
       .status(200)
+      .clearCookie("access_token")
+      .clearCookie("refresh_token")
       .send({
         message: true,
       });

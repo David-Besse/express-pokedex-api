@@ -20,26 +20,44 @@ const authMiddleware = async (
   // Get the access token and refresh token from the request
   const accessToken = req.signedCookies["access_token"];
   const refreshToken = req.signedCookies["refresh_token"];
-  if (!refreshToken || !accessToken) {
+  if (!accessToken || !refreshToken) {
     res.status(401).send({ message: "No token found in the request" });
     return next();
   }
 
   // Verify the access token
-  const accessTokenVerified = jwt.verify(
-    accessToken,
-    process.env.ACCESS_TOKEN_SECRET as Secret
-  );
+  let accessTokenVerified;
+  try {
+    accessTokenVerified = jwt.verify(
+      accessToken,
+      process.env.ACCESS_TOKEN_SECRET as Secret
+    );
+  } catch (error) {
+    if (error instanceof jwt.JsonWebTokenError) {
+      res.status(401).send({ message: "Invalid access token" });
+      return next();
+    }
+    throw error;
+  }
   if (!accessTokenVerified) {
     res.status(401).send({ message: "Invalid access token" });
     return next();
   }
 
   // Verify the refresh token
-  const refreshTokenVerified = jwt.verify(
-    refreshToken,
-    process.env.REFRESH_TOKEN_SECRET as Secret
-  );
+  let refreshTokenVerified;
+  try {
+    refreshTokenVerified = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET as Secret
+    );
+  } catch (error) {
+    if (error instanceof jwt.JsonWebTokenError) {
+      res.status(401).send({ message: "Invalid refresh token" });
+      return next();
+    }
+    throw error;
+  }
   if (!refreshTokenVerified) {
     res.status(401).send({ message: "Invalid refresh token" });
     return next();

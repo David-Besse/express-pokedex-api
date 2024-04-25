@@ -181,13 +181,14 @@ pokemonsRouter
   .route("/api/pokemons")
 
   // Endpoint to get all pokemons
-  .get(authMiddleware, async (req: Request, res: Response) => {
+  .get(async (req: Request, res: Response) => {
     try {
       const pokemonsList: Pokemon[] = await prisma.pokemon.findMany();
       await prisma.$disconnect();
-      res.status(200).json(pokemonsList);
+      if (pokemonsList) {
+        res.status(200).json(pokemonsList);
+      }
     } catch (error: any) {
-      console.error(error);
       res.status(error.status).json([]);
       await prisma.$disconnect();
       process.exit(1);

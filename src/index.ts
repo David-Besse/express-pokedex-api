@@ -31,7 +31,7 @@ const corsOptions = {
   origin:
     process.env.NODE_ENV === "production"
       ? (process.env.CLIENT_URL_P as string)
-      : (process.env.CLIENT_URL as string),
+      : (process.env.CLIENT_URL as string || '*'),
   credentials: true,
 };
 app.use(cors(corsOptions));
