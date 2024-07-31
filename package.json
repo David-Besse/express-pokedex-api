@@ -20,7 +20,7 @@
   "author": "David Besse",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^5.17.0",
+    "@prisma/client": "^5.16.2",
     "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
