@@ -1,5 +1,6 @@
 import { User } from "../src/models/user";
 
+// create an array of users
 const Users: User[] = [
   {
     id: 1,
